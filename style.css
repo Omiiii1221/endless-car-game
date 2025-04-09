@@ -1,0 +1,238 @@
+/* Road Animation */
+#road {
+    background: repeating-linear-gradient(
+        90deg,
+        #1a1a1a 0px,
+        #1a1a1a 50px,
+        #333 50px,
+        #333 100px
+    );
+    animation: scrollRoad 1s linear infinite;
+    will-change: background-position;
+}
+
+@keyframes scrollRoad {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 0 100px;
+    }
+}
+
+/* Enemy Car Animation */
+.enemy-car {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    transition: transform 0.1s ease-out;
+    will-change: transform, top;
+}
+
+.enemy-car img {
+    animation: carWobble 0.5s ease-in-out infinite alternate;
+}
+
+/* Collision area indicator (for debugging) */
+.enemy-car::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px; /* 2/3 of car width */
+    height: 64px; /* 2/3 of car height */
+    transform: translate(-50%, -50%);
+    border: 2px dashed rgba(255, 0, 0, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show collision area when hovering over enemy car (for debugging) */
+.enemy-car:hover::after {
+    opacity: 1;
+}
+
+@keyframes carWobble {
+    from {
+        transform: rotate(-1deg);
+    }
+    to {
+        transform: rotate(1deg);
+    }
+}
+
+/* Power-up Animation */
+.power-up {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    will-change: transform, top;
+    animation: powerUpFloat 1s ease-in-out infinite alternate;
+}
+
+/* Collection area indicator (for debugging) */
+.power-up::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 58px; /* Slightly larger than power-up */
+    height: 58px;
+    transform: translate(-50%, -50%);
+    border: 2px dashed rgba(0, 255, 0, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show collection area when hovering over power-up (for debugging) */
+.power-up:hover::after {
+    opacity: 1;
+}
+
+@keyframes powerUpFloat {
+    from {
+        transform: translateY(0) scale(1);
+    }
+    to {
+        transform: translateY(-5px) scale(1.1);
+    }
+}
+
+/* Game Container Styles */
+#gameContainer {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Player Car Styles */
+#playerCar {
+    transition: left 0.1s ease-out;
+    z-index: 10;
+    will-change: left;
+}
+
+#playerCar img {
+    animation: playerCarIdle 0.5s ease-in-out infinite alternate;
+}
+
+/* Player collision area indicator (for debugging) */
+#playerCar::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px; /* 2/3 of car width */
+    height: 64px; /* 2/3 of car height */
+    transform: translate(-50%, -50%);
+    border: 2px dashed rgba(0, 0, 255, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show player collision area when game is paused (for debugging) */
+#gameContainer.paused #playerCar::after {
+    opacity: 1;
+}
+
+@keyframes playerCarIdle {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-2px);
+    }
+}
+
+/* Shield Effect */
+.shield-active {
+    animation: shieldPulse 1s ease-in-out infinite;
+}
+
+@keyframes shieldPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 150, 255, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(0, 150, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 150, 255, 0);
+    }
+}
+
+/* Flash Effect */
+.flash {
+    animation: flash 0.5s;
+}
+
+@keyframes flash {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Score Display */
+.score-display {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Animations */
+.modal-enter {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    #gameContainer {
+        width: 500px !important;
+        height: 500px !important;
+    }
+    
+    .enemy-car {
+        width: 80px;
+        height: 80px;
+    }
+    
+    #playerCar {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    #gameContainer {
+        width: 400px !important;
+        height: 400px !important;
+    }
+    
+    .enemy-car {
+        width: 64px;
+        height: 64px;
+    }
+    
+    #playerCar {
+        width: 64px;
+        height: 64px;
+    }
+} 

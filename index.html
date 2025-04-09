@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thar vs. Traffic - Endless Car Driving Game</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Play Thar vs. Traffic, an exciting endless car driving game where you dodge traffic, collect power-ups, and try to beat your high score!">
+    <meta name="keywords" content="car game, driving game, endless runner, traffic game, Thar vs Traffic, arcade game, browser game">
+    <meta name="author" content="Thar vs. Traffic Game">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Thar vs. Traffic - Endless Car Driving Game">
+    <meta property="og:description" content="Play Thar vs. Traffic, an exciting endless car driving game where you dodge traffic, collect power-ups, and try to beat your high score!">
+    <meta property="og:image" content="assets/P_car.png">
+    <meta property="og:url" content="https://tharvstraffic.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Thar vs. Traffic - Endless Car Driving Game">
+    <meta name="twitter:description" content="Play Thar vs. Traffic, an exciting endless car driving game where you dodge traffic, collect power-ups, and try to beat your high score!">
+    <meta name="twitter:image" content="assets/P_car.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/P_car.png" type="image/png">
+    <link rel="apple-touch-icon" href="assets/P_car.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <!-- <img src="assets/P_car.png" alt="Thar vs. Traffic Logo" class="h-10 w-10 mr-3"> -->
+                        <span class="text-xl font-bold text-white">Thar vs. Traffic</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="#instructionsModal" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" id="navHowToPlay">How to Play</a>
+                    <a href="#leaderboardModal" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" id="navLeaderboard">Leaderboard</a>
+                    <button id="navPlayNow" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out transform hover:scale-105">Play Now</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container with Ads Space -->
+    <div class="flex justify-between items-center min-h-screen p-4">
+        <!-- Left Ad Space -->
+        <div class="w-48 h-[600px] bg-gray-800 rounded-lg flex items-center justify-center">
+            <span class="text-gray-500">Ad Space</span>
+        </div>
+
+        <!-- Game Container -->
+        <div id="gameContainer" class="relative w-[600px] h-[600px] overflow-hidden mx-4">
+            <!-- Road Background -->
+            <div id="road" class="absolute w-full h-full bg-gray-800"></div>
+            
+            <!-- Player Car -->
+            <div id="playerCar" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 w-24 h-24">
+                <img src="assets/P_car.png" alt="Player Car" class="w-full h-full object-contain">
+            </div>
+
+            <!-- Score Display -->
+            <div class="absolute top-4 right-4 text-white text-xl font-bold">
+                Score: <span id="score">0</span>
+            </div>
+
+            <!-- Lives Display -->
+            <div id="livesDisplay" class="absolute top-4 left-4 flex"></div>
+
+            <!-- Pause Button -->
+            <button id="pauseButton" class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 text-white rounded-full p-2 z-20">
+                <i class="bi bi-pause-fill text-xl"></i>
+            </button>
+
+            <!-- Start Screen -->
+            <div id="startScreen" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+                <div class="bg-gray-800 p-8 rounded-lg text-center">
+                    <h1 class="text-4xl font-bold mb-4">Thar vs. Traffic</h1>
+                    <p class="mb-6">Move your mouse left and right to control the car!</p>
+                    <div class="flex justify-center space-x-4">
+                        <button id="startButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg">
+                            Start Game
+                        </button>
+                        <button id="instructionsButton" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg">
+                            Instructions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pause Screen -->
+            <div id="pauseScreen" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 hidden">
+                <div class="bg-gray-800 p-8 rounded-lg text-center">
+                    <h1 class="text-4xl font-bold mb-4">Game Paused</h1>
+                    <p class="mb-6">Press Escape or click Resume to continue</p>
+                    <button id="resumeButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg">
+                        Resume Game
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 hidden">
+                <div class="bg-gray-800 p-8 rounded-lg text-center">
+                    <h1 class="text-4xl font-bold mb-4">Game Over!</h1>
+                    <p class="text-2xl mb-4">Final Score: <span id="finalScore">0</span></p>
+                    <p class="text-xl mb-6">High Score: <span id="highScore">0</span></p>
+                    <div class="flex justify-center space-x-4">
+                        <button id="restartButton" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg">
+                            Play Again
+                        </button>
+                        <button id="instructionsButton2" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg">
+                            Instructions
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Ad Space -->
+        <div class="w-48 h-[600px] bg-gray-800 rounded-lg flex items-center justify-center">
+            <span class="text-gray-500">Ad Space</span>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 hidden">
+        <div class="bg-gray-800 p-8 rounded-lg text-center max-w-2xl">
+            <h2 class="text-3xl font-bold mb-4">How to Play</h2>
+            
+            <div class="text-left mb-6">
+                <h3 class="text-xl font-bold mb-2">Controls:</h3>
+                <p class="mb-2">• Move your mouse left and right to control the car</p>
+                <p class="mb-2">• Avoid the incoming enemy cars</p>
+                <p class="mb-2">• Collect power-ups to gain advantages</p>
+                <p class="mb-2">• Press Escape to pause the game</p>
+            </div>
+            
+            <div class="text-left mb-6">
+                <h3 class="text-xl font-bold mb-2">Power-ups:</h3>
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div class="flex flex-col items-center">
+                        <img src="assets/shield.png" alt="Shield" class="w-12 h-12 mb-2">
+                        <p>Shield - Temporary invincibility</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img src="assets/speed.png" alt="Speed" class="w-12 h-12 mb-2">
+                        <p>Speed Boost - Move faster</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img src="assets/life.png" alt="Life" class="w-12 h-12 mb-2">
+                        <p>Extra Life - Gain a life (max 5)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-left mb-6">
+                <h3 class="text-xl font-bold mb-2">Scoring:</h3>
+                <p class="mb-2">• Score points by surviving longer</p>
+                <p class="mb-2">• Game speed increases as your score grows</p>
+                <p class="mb-2">• Try to beat your high score!</p>
+            </div>
+            
+            <button id="closeInstructionsButton" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg">
+                Got it!
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboardModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 hidden">
+        <div class="bg-gray-800 p-8 rounded-lg text-center max-w-2xl w-full">
+            <h2 class="text-3xl font-bold mb-6">Leaderboard</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-gray-700 rounded-lg overflow-hidden">
+                    <thead class="bg-gray-900">
+                        <tr>
+                            <th class="py-3 px-4 text-left">Rank</th>
+                            <th class="py-3 px-4 text-left">Player</th>
+                            <th class="py-3 px-4 text-left">Score</th>
+                            <th class="py-3 px-4 text-left">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">1</td>
+                            <td class="py-3 px-4">SpeedDemon</td>
+                            <td class="py-3 px-4">12,450</td>
+                            <td class="py-3 px-4">2023-11-15</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">2</td>
+                            <td class="py-3 px-4">RoadWarrior</td>
+                            <td class="py-3 px-4">10,875</td>
+                            <td class="py-3 px-4">2023-11-14</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">3</td>
+                            <td class="py-3 px-4">TharMaster</td>
+                            <td class="py-3 px-4">9,320</td>
+                            <td class="py-3 px-4">2023-11-13</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">4</td>
+                            <td class="py-3 px-4">TrafficNinja</td>
+                            <td class="py-3 px-4">8,765</td>
+                            <td class="py-3 px-4">2023-11-12</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">5</td>
+                            <td class="py-3 px-4">DriftKing</td>
+                            <td class="py-3 px-4">7,890</td>
+                            <td class="py-3 px-4">2023-11-11</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">6</td>
+                            <td class="py-3 px-4">NightRider</td>
+                            <td class="py-3 px-4">6,540</td>
+                            <td class="py-3 px-4">2023-11-10</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">7</td>
+                            <td class="py-3 px-4">HighwayHero</td>
+                            <td class="py-3 px-4">5,980</td>
+                            <td class="py-3 px-4">2023-11-09</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">8</td>
+                            <td class="py-3 px-4">ThrottleQueen</td>
+                            <td class="py-3 px-4">5,210</td>
+                            <td class="py-3 px-4">2023-11-08</td>
+                        </tr>
+                        <tr class="border-b border-gray-600">
+                            <td class="py-3 px-4">9</td>
+                            <td class="py-3 px-4">RoadRunner</td>
+                            <td class="py-3 px-4">4,875</td>
+                            <td class="py-3 px-4">2023-11-07</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4">10</td>
+                            <td class="py-3 px-4">TharChampion</td>
+                            <td class="py-3 px-4">4,320</td>
+                            <td class="py-3 px-4">2023-11-06</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-6">
+                <button id="closeLeaderboardButton" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2023 Thar vs. Traffic. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Game Script -->
+    <script src="script.js"></script>
+</body>
+</html> 
