@@ -63,5 +63,5 @@ The game requires the following audio files to be placed in the `assets/audio` d
 
 ## Credits
 
-- Game developed by [Your Name]
+- Game developed by Om Gaikwad
 - Audio credits should be added here after downloading the files 
